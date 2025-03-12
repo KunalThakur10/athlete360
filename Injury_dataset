@@ -1,0 +1,45 @@
+import 'dart:math';
+
+class InjuryData {
+  static final List<Map<String, String>> injuries = [
+    // Head & Neck Injuries
+    {"type": "Head", "injury": "Concussion"},
+    {"type": "Head", "injury": "Neck strain"},
+    {"type": "Head", "injury": "Jaw fracture"},
+    {"type": "Head", "injury": "Eye injury"},
+    {"type": "Head", "injury": "Broken nose"},
+    
+    // Upper Body Injuries
+    {"type": "Upper Body", "injury": "Shoulder dislocation"},
+    {"type": "Upper Body", "injury": "Rotator cuff tear"},
+    {"type": "Upper Body", "injury": "Clavicle fracture"},
+    {"type": "Upper Body", "injury": "Tennis elbow"},
+    {"type": "Upper Body", "injury": "Wrist sprain"},
+    
+    // Lower Body Injuries
+    {"type": "Lower Body", "injury": "Hamstring strain"},
+    {"type": "Lower Body", "injury": "Knee ligament tear"},
+    {"type": "Lower Body", "injury": "Ankle sprain"},
+    {"type": "Lower Body", "injury": "Shin splints"},
+    {"type": "Lower Body", "injury": "Groin strain"},
+    
+    // General Injuries
+    {"type": "General", "injury": "Muscle cramp"},
+    {"type": "General", "injury": "Dehydration"},
+    {"type": "General", "injury": "Stress fracture"},
+    {"type": "General", "injury": "Back pain"},
+    {"type": "General", "injury": "Blisters"},
+  ];
+
+  /// Get a random injury
+  static Map<String, String> getRandomInjury() {
+    final random = Random();
+    return injuries[random.nextInt(injuries.length)];
+  }
+}
+
+void main() {
+  // Example usage
+  Map<String, String> randomInjury = InjuryData.getRandomInjury();
+  print("Random Injury: ${randomInjury['injury']} (${randomInjury['type']})");
+}
