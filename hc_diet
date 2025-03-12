@@ -1,0 +1,59 @@
+import 'dart:math';
+// HARD CODED FOR DEMO VERSION, USE THIS AS THE DIET RECOMMENDATION SYSTEM THIS IS NOT AI DIET PLANNER
+class DietData {
+  static final List<Map<String, String>> dietPlans = [
+    // Breakfast Options
+    {"meal": "Breakfast", "food": "Oatmeal with bananas and almonds"},
+    {"meal": "Breakfast", "food": "Scrambled eggs with whole wheat toast"},
+    {"meal": "Breakfast", "food": "Greek yogurt with honey and berries"},
+    {"meal": "Breakfast", "food": "Protein smoothie with spinach, banana, and peanut butter"},
+    {"meal": "Breakfast", "food": "Whole grain pancakes with maple syrup and fruit"},
+
+    // Pre-Workout Snacks
+    {"meal": "Pre-Workout", "food": "Banana with peanut butter"},
+    {"meal": "Pre-Workout", "food": "Energy bar with nuts and seeds"},
+    {"meal": "Pre-Workout", "food": "Boiled eggs with a slice of whole grain bread"},
+    {"meal": "Pre-Workout", "food": "Greek yogurt with honey"},
+    {"meal": "Pre-Workout", "food": "Handful of almonds and walnuts"},
+
+    // Lunch Options
+    {"meal": "Lunch", "food": "Grilled chicken with brown rice and vegetables"},
+    {"meal": "Lunch", "food": "Salmon with quinoa and steamed broccoli"},
+    {"meal": "Lunch", "food": "Lentil soup with whole wheat bread"},
+    {"meal": "Lunch", "food": "Tofu stir-fry with mixed vegetables and rice"},
+    {"meal": "Lunch", "food": "Grilled turkey sandwich with avocado and salad"},
+
+    // Post-Workout Meals
+    {"meal": "Post-Workout", "food": "Whey protein shake with almond milk"},
+    {"meal": "Post-Workout", "food": "Chicken breast with sweet potatoes"},
+    {"meal": "Post-Workout", "food": "Cottage cheese with nuts and honey"},
+    {"meal": "Post-Workout", "food": "Boiled eggs with fruit"},
+    {"meal": "Post-Workout", "food": "Rice with lean beef and stir-fried veggies"},
+
+    // Dinner Options
+    {"meal": "Dinner", "food": "Grilled fish with steamed vegetables"},
+    {"meal": "Dinner", "food": "Quinoa salad with chickpeas and olive oil"},
+    {"meal": "Dinner", "food": "Chicken soup with whole wheat bread"},
+    {"meal": "Dinner", "food": "Baked sweet potatoes with grilled tofu"},
+    {"meal": "Dinner", "food": "Vegetable curry with brown rice"},
+
+    // Hydration & Snacks
+    {"meal": "Snacks", "food": "Smoothie with mixed berries and protein powder"},
+    {"meal": "Snacks", "food": "Handful of trail mix (nuts and dried fruits)"},
+    {"meal": "Snacks", "food": "Hummus with whole grain crackers"},
+    {"meal": "Snacks", "food": "Low-fat cheese with apple slices"},
+    {"meal": "Snacks", "food": "Coconut water with a protein bar"},
+  ];
+
+  /// Get a random diet recommendation
+  static Map<String, String> getRandomMeal() {
+    final random = Random();
+    return dietPlans[random.nextInt(dietPlans.length)];
+  }
+}
+
+void main() {
+  // Example usage
+  Map<String, String> randomMeal = DietData.getRandomMeal();
+  print("Recommended Meal: ${randomMeal['food']} (${randomMeal['meal']})");
+}
