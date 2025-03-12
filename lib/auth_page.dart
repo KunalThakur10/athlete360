@@ -1,0 +1,495 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:math' as math;
+
+// Create this as a new file named 'auth_page.dart' in your lib folder
+void main() {
+  runApp(const AuthApp());
+}
+
+class AuthApp extends StatelessWidget {
+  const AuthApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Athlete Management',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1976D2),
+          brightness: Brightness.light,
+        ),
+        fontFamily: 'Poppins',
+      ),
+      home: const AuthPage(),
+    );
+  }
+}
+
+class AuthPage extends StatefulWidget {
+  const AuthPage({Key? key}) : super(key: key);
+
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin {
+  bool isLogin = true;
+  bool isCoach = true;
+  late AnimationController _animationController;
+  late Animation<double> _animationTextRotate;
+
+  void setUpAnimation() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _animationTextRotate = Tween<double>(
+      begin: 0,
+      end: 90 * math.pi / 180,
+    ).animate(_animationController);
+  }
+
+  void updateView() {
+    setState(() {
+      isLogin = !isLogin;
+    });
+    isLogin ? _animationController.reverse() : _animationController.forward();
+  }
+
+  @override
+  void initState() {
+    setUpAnimation();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Background gradient
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.blue.shade50,
+                  Colors.blue.shade100,
+                ],
+              ),
+            ),
+          ),
+
+          // Login/Signup Container
+          SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: size.height * 0.08),
+
+                // Logo and App Title
+                Column(
+                  children: [
+                    // Animated rotating sports icon
+                    TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0, end: 1),
+                      duration: const Duration(seconds: 1),
+                      builder: (context, value, child) {
+                        return Transform.rotate(
+                          angle: value * 2 * math.pi,
+                          child: Icon(
+                            Icons.sports,
+                            size: 64,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    // App Title
+                    const Text(
+                      "Athlete Management",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 40),
+
+                // Coach/Player Toggle
+                Container(
+                  width: size.width * 0.8,
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isCoach = true;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: isCoach
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Coach",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: isCoach ? Colors.white : Colors.black54,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isCoach = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: !isCoach
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Player",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: !isCoach ? Colors.white : Colors.black54,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: size.height * 0.05),
+
+                AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, _) {
+                    return Stack(
+                      children: [
+                        // Login Form
+                        AnimatedOpacity(
+                          opacity: isLogin ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 500),
+                          child: Visibility(
+                            visible: isLogin,
+                            child: Container(
+                              width: size.width * 0.8,
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 16,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    isCoach ? "Coach Login" : "Player Login",
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 24),
+
+                                  // Email Field
+                                  _buildTextField(
+                                    hint: "Email",
+                                    icon: Icons.email_outlined,
+                                    isPassword: false,
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Password Field
+                                  _buildTextField(
+                                    hint: "Password",
+                                    icon: Icons.lock_outline,
+                                    isPassword: true,
+                                  ),
+                                  const SizedBox(height: 8),
+
+                                  // Forgot Password
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        // TODO: Implement forgot password
+                                      },
+                                      child: const Text(
+                                        "Forgot Password?",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Login Button
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      // TODO: Implement Firebase login
+                                      print("Login as ${isCoach ? 'Coach' : 'Player'}");
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Theme.of(context).colorScheme.primary,
+                                      foregroundColor: Colors.white,
+                                      minimumSize: const Size.fromHeight(50),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    child: const Text(
+                                      "LOGIN",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Sign Up Form
+                        AnimatedOpacity(
+                          opacity: isLogin ? 0.0 : 1.0,
+                          duration: const Duration(milliseconds: 500),
+                          child: Visibility(
+                            visible: !isLogin,
+                            child: Container(
+                              width: size.width * 0.8,
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 16,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    isCoach ? "Coach Sign Up" : "Player Sign Up",
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 24),
+
+                                  // Full Name Field
+                                  _buildTextField(
+                                    hint: "Full Name",
+                                    icon: Icons.person_outline,
+                                    isPassword: false,
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Email Field
+                                  _buildTextField(
+                                    hint: "Email",
+                                    icon: Icons.email_outlined,
+                                    isPassword: false,
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Password Field
+                                  _buildTextField(
+                                    hint: "Password",
+                                    icon: Icons.lock_outline,
+                                    isPassword: true,
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Confirm Password Field
+                                  _buildTextField(
+                                    hint: "Confirm Password",
+                                    icon: Icons.lock_outline,
+                                    isPassword: true,
+                                  ),
+
+                                  // Additional fields for Coach/Player
+                                  if (isCoach) ...[
+                                    const SizedBox(height: 16),
+                                    _buildTextField(
+                                      hint: "Team Name",
+                                      icon: Icons.group_outlined,
+                                      isPassword: false,
+                                    ),
+                                  ] else ...[
+                                    const SizedBox(height: 16),
+                                    _buildTextField(
+                                      hint: "Team Name",
+                                      icon: Icons.sports_soccer_outlined,
+                                      isPassword: false,
+                                    ),
+                                  ],
+
+                                  const SizedBox(height: 24),
+
+                                  // Sign Up Button
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      // TODO: Implement Firebase signup
+                                      print("Sign up as ${isCoach ? 'Coach' : 'Player'}");
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Theme.of(context).colorScheme.primary,
+                                      foregroundColor: Colors.white,
+                                      minimumSize: const Size.fromHeight(50),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    child: const Text(
+                                      "SIGN UP",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 24),
+
+                // Switch between Login/Signup
+                GestureDetector(
+                  onTap: () {
+                    updateView();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        isLogin ? "Don't have an account? " : "Already have an account? ",
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        isLogin ? "Sign Up" : "Login",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: size.height * 0.05),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String hint,
+    required IconData icon,
+    required bool isPassword,
+  }) {
+    return TextFormField(
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        hintText: hint,
+        prefixIcon: Icon(icon, color: Colors.grey.shade600),
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
+        ),
+      ),
+    );
+  }
+}
