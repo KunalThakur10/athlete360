@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
 
-// Create this as a new file named 'auth_page.dart' in your lib folder
 void main() {
   runApp(const AuthApp());
 }
@@ -86,7 +85,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
     return Scaffold(
       body: Stack(
         children: [
-          // Background gradient
+        
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -107,10 +106,10 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
               children: [
                 SizedBox(height: size.height * 0.08),
 
-                // Logo and App Title
+            
                 Column(
                   children: [
-                    // Animated rotating sports icon
+                  
                     TweenAnimationBuilder<double>(
                       tween: Tween<double>(begin: 0, end: 1),
                       duration: const Duration(seconds: 1),
@@ -126,7 +125,7 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                       },
                     ),
                     const SizedBox(height: 8),
-                    // App Title
+                 
                     const Text(
                       "Athlete Management",
                       style: TextStyle(
@@ -254,7 +253,6 @@ class _AuthPageState extends State<AuthPage> with SingleTickerProviderStateMixin
                                   ),
                                   const SizedBox(height: 24),
 
-                                  // Email Field
                                   _buildTextField(
                                     hint: "Email",
                                     icon: Icons.email_outlined,
