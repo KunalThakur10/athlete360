@@ -314,7 +314,10 @@ class _CreatePracSessionWidgetState extends State<CreatePracSessionWidget> {
                                       ChipData('Regular'),
                                       ChipData('Final'),
                                       ChipData('Match'),
-                                      ChipData('Freeplay')
+                                      ChipData('Freeplay'),
+                                      ChipData('Balling'),
+                                      ChipData('Batting'),
+                                      ChipData('Stamina')
                                     ],
                                     onChanged: (val) => safeSetState(() =>
                                         _model.choiceChipsValue =
